@@ -1,0 +1,48 @@
+{% extends 'layout.html' %}
+
+{% block title %}
+2024 Payload
+{% endblock %}
+
+{% block header %}
+{% endblock %}
+
+{% block content %}
+<section>
+	<h3>Camera Preview</h3>
+	<img id="camera-preview" width="425" height="250" alt="camera preview" src="/preview.jpg">
+	<script>
+		const previewWindow = document.querySelector("#camera-preview");
+		setInterval(() => {
+			previewWindow.src = "/preview.jpg#" + new Date().getTime();
+		}, 333);
+	</script>
+</section>
+<section class="mt-3">
+	<h3>Sensor Data</h3>
+	<ul class="sensor-data">
+		<li>Altitude: --- ft</li>
+		<li>Temperature: --- F</li>
+		<li>Acceleration X: --- </li>
+		<li>Acceleration Y: --- </li>
+		<li>Acceleration Z: --- </li>
+		<li>Rotation X: --- </li>
+		<li>Rotation Y: --- </li>
+		<li>Rotation Z: --- </li>
+	</ul>
+</section>
+<section class="mt-3">
+	<h3>Recording</h3>
+	<form class="d-grid gap-3 mt-3" action="{% if recording %}/stop{% else %}/start{% endif %}" method="post">
+		<div class="input-group">
+			<span class="input-group-text" for="name">Flight Name</span>
+			<input {% if recording %}disabled{% endif %} type="text" class="form-control" placeholder="2024-01-01 I405" id="name" name="name" value="{{ name }}">
+		</div>
+		{% if recording %}
+		<button type="submit" class="btn btn-danger">Stop Recording</button>
+		{% else %}
+		<button type="submit" class="btn btn-primary">Start Recording</button>
+		{% endif %}
+	</form>
+</section>
+{% endblock %}

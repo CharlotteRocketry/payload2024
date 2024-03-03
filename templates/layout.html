@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+	<meta charset="UTF-8" />
+	<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+	<title>{% block title %}{% endblock %}</title>
+
+	<link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+	<link href="{{ url_for('static', filename='bootstrap.min.css') }}" rel="stylesheet">
+
+	{% block head %}{% endblock %}
+</head>
+
+<body>
+	<script src="{{ url_for('static', filename='bootstrap.bundle.min.js') }}"></script>
+	<header>
+		<nav class="navbar navbar-expand-lg bg-body-tertiary border-bottom border-body">
+			<div class="container-fluid container-md">
+				<div class="navbar-brand" href="#">2024 Payload</div>
+				<button class="navbar-toggler" type="button" data-bs-toggle="collapse"
+					data-bs-target="#navbarSupportedContent" aria-controls="navbarSupportedContent"
+					aria-expanded="false" aria-label="Toggle navigation">
+					<span class="navbar-toggler-icon"></span>
+				</button>
+				<div class="collapse navbar-collapse" id="navbarSupportedContent">
+					<ul class="navbar-nav ms-auto mb-2 mb-lg-0">
+						<li class="nav-item">
+							<a class="nav-link {% if main_active %}active{% endif %}" aria-current="page"
+								href="/">Main</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link {% if config_active %}active{% endif %}" aria-current="page"
+								href="/config">Config</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link {% if flights_active %}active{% endif %}" aria-current="page"
+								href="/flights">Flights</a>
+						</li>
+					</ul>
+				</div>
+			</div>
+		</nav>
+		{% block header %}{% endblock %}
+	</header>
+	<main class="container-md pt-3">
+		{% block content %}{% endblock %}
+	</main>
+</body>
+
+</html>
