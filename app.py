@@ -1,12 +1,13 @@
+import json
+from glob import glob
 from flask import Flask, request, redirect, render_template, send_file
-from src.camera import Camera
+from src import camera
+from src.recording import Recording
 
 app = Flask(__name__)
 
-recording = False
+recording = None
 name = ""
-
-camera = Camera()
 
 @app.route("/")
 def main():
@@ -19,8 +20,9 @@ def start():
     global recording, name
     name = request.form.get("name", "")
     if name != "":
-        camera.start_video('test.mp4')
-        recording = True
+        recording = Recording(name)
+        recording.write_metadata()
+        recording.start_video()
     return redirect("/")
 
 
@@ -29,7 +31,8 @@ def start():
 def stop():
     camera.stop_video()
     global recording, name
-    recording = False
+    recording.stop_video()
+    recording = None
     name = ""
     return redirect("/")
 
@@ -43,16 +46,15 @@ def config():
 # get flights page
 @app.route('/flights')
 def flights():
-    return render_template('pages/flights.html', flights_active=True)
+    flights_list = []
+    for metadata_file in glob('data/*/meta.json'):
+        flights_list.append(json.load(open(metadata_file)))
+    flights_list.sort(key=lambda x: x['name'])
+    return render_template('pages/flights.html', flights_list=flights_list, flights_active=True)
 
 
 @app.route("/preview.jpg")
 def camera_preview():
     camera.generate_preview("data/preview.jpg")
     return send_file("data/preview.jpg")
-
-
-@app.route("/video.mp4")
-def video():
-    return send_file("test.mp4")
 
