@@ -29,12 +29,13 @@ def start():
 # stop a recording
 @app.route('/stop', methods=["POST"])
 def stop():
-    camera.stop_video()
     global recording, name
+    camera.stop_video()
+    id = recording.id
     recording.stop_video()
     recording = None
     name = ""
-    return redirect("/")
+    return redirect("/flights?flight=" + id)
 
 
 # get settings page
@@ -50,8 +51,16 @@ def flights():
     for metadata_file in glob('data/*/meta.json'):
         flights_list.append(json.load(open(metadata_file)))
     flights_list.sort(key=lambda x: x['name'])
-    return render_template('pages/flights.html', flights_list=flights_list, flights_active=True)
+    highlighted_flight = request.args.get('flight', default='', type=str)
+    return render_template('pages/flights.html', flights_list=flights_list, highlighted_flight=highlighted_flight, flights_active=True)
 
+@app.route("/flights/<id>/video.mp4")
+def video(id):
+    return send_file("data/" + id + "/video.mp4")
+
+@app.route("/flights/<id>/data.csv")
+def data(id):
+    return ""
 
 @app.route("/preview.jpg")
 def camera_preview():

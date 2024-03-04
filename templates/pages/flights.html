@@ -13,22 +13,21 @@
 	{% for flight in flights_list %}
 	<div class="accordion-item">
 		<h2 class="accordion-header">
-			<button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="#{{flight.id}}"
-				 aria-controls="{{flight.id}}">
+			<button class="accordion-button {%if highlighted_flight != flight.id%}collapsed{%endif%}" type="button" data-bs-toggle="collapse"
+				data-bs-target="#{{flight.id}}" aria-controls="{{flight.id}}">
 				{{flight.name}}
 			</button>
 		</h2>
-		<div id="{{flight.id}}" class="accordion-collapse collapse" data-bs-parent="#flights-accordion">
+		<div id="{{flight.id}}" class="accordion-collapse collapse {%if highlighted_flight == flight.id%}show{%endif%}" data-bs-parent="#flights-accordion">
 			<div class="accordion-body">
-				<strong>This is the first item's accordion body.</strong> It is shown by default, until the collapse
-				plugin adds the appropriate classes that we use to style each element. These classes control the overall
-				appearance, as well as the showing and hiding via CSS transitions. You can modify any of this with
-				custom CSS or overriding our default variables. It's also worth noting that just about any HTML can go
-				within the <code>.accordion-body</code>, though the transition does limit overflow.
+				<video controls class="img-fluid" width="425" height="250">
+					<source src="/flights/{{flight.id}}/video.mp4" type="video/mp4" />
+					<a href="/flights/{{flight.id}}/video.mp4">Download MP4</a>
+				</video>
 			</div>
 		</div>
 	</div>
-	
+
 	{% endfor %}
 </div>
 {% endblock %}
